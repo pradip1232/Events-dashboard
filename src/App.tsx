@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Users from './pages/Users';
 import DynamicForm from "./pages/DynamicForm";
 import AddNewEvents from "./pages/AddNewEvents";
+import ViewForm from "./pages/ViewForm";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
           <Route path="users" element={<Users />} />
           <Route path="create-new-events" element={<AddNewEvents />} />
           <Route path="create-new-form" element={<DynamicForm />} />
+          <Route path="events-form" element={<ViewForm />} />
         </Route>
       </Routes>
     </Router>

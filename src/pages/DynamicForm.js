@@ -12,6 +12,7 @@ import AccordionSummary, {
     accordionSummaryClasses,
 } from '@mui/joy/AccordionSummary';
 import AddIcon from '@mui/icons-material/Add';
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 
 const customFields = [
@@ -85,7 +86,7 @@ const DynamicForm = () => {
     };
 
 
-    const handleLaunchForm = async (eventId, formId) => {
+    const handleLaunchForm = async (eventId, formId, eventName, setUrl) => {
         try {
             const response = await fetch("http://localhost/events/update_form_status.php", {
                 method: "POST",
@@ -98,6 +99,8 @@ const DynamicForm = () => {
             const result = await response.json();
             if (result.success) {
                 console.log("Form status updated successfully!");
+
+               
             } else {
                 console.error("Failed to update form status:", result.message);
             }
@@ -156,6 +159,23 @@ const DynamicForm = () => {
 
         fetchEvents();
     }, []);
+
+
+
+
+
+
+
+
+
+
+
+    const [generatedUrl, setGeneratedUrl] = useState("");
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(generatedUrl);
+        // alert(generatedUrl," URL copied!");
+    };
 
     return (
 
@@ -350,10 +370,26 @@ const DynamicForm = () => {
                                                                     size="small"
                                                                     className="mx-3"
                                                                     style={{ marginTop: 5 }}
-                                                                    onClick={() => handleLaunchForm(event.id, form.id)}
+                                                                    onClick={() => handleLaunchForm(event.id, form.id, event.name, setGeneratedUrl)}
                                                                 >
                                                                     Launch this form
                                                                 </Button>
+
+                                                                {/* Get URL and Copy to Clipboard */}
+                                                                {generatedUrl && (
+                                                                    <IconButton
+                                                                        onClick={() => {
+                                                                            const newUrl = `${window.location.origin}/events-form?e-name=${encodeURIComponent(event.name)}&ed=${event.id}&fid=${form.id}`;
+                                                                            navigator.clipboard.writeText(newUrl);  // Copy to clipboard
+                                                                            alert("URL copied!");  // Show confirmation
+                                                                        }}
+                                                                        color="primary"
+                                                                    >
+                                                                        <ContentCopyIcon />
+                                                                    </IconButton>
+                                                                )}
+
+
                                                                 {/* <Button
                                                                     variant="outlined"
                                                                     color="secondary"
