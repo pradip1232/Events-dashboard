@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import { TextField, MenuItem, Select, InputLabel, FormControl, Button } from "@mui/material";
 
+import { FormHelperText } from "@mui/material";
 
 
 
@@ -165,13 +166,33 @@ const ViewForm = () => {
                 {formData && formData.form_data.map((field, index) => (
                     <div key={index} style={{ marginBottom: "15px" }}>
                         {/* Text Fields */}
-                        {["First Name", "Last Name", "Phone Number", "Company Name", "City", "Job Title", "Notes"].includes(field) && (
+                        {["First Name", "Last Name", "Company Name", "City", "Job Title", "Notes"].includes(field) && (
                             <TextField
                                 fullWidth
                                 label={field}
                                 name={field}
                                 value={formValues[field] || ""}
                                 onChange={handleInputChange}
+                                required
+                                error={!formValues[field]}
+                                helperText={!formValues[field] ? `${field} is required` : ""}
+                            />
+                        )}
+                        {/* Phone Field */}
+                        {field === "Phone Number" && (
+                            <TextField
+                                fullWidth
+                                label={field}
+                                name={field}
+                                value={formValues[field] || ""}
+                                onChange={(e) => {
+                                    let input = e.target.value;
+                                    input = input.replace(/\D/g, "").slice(0, 10);
+                                    setFormValues((prev) => ({ ...prev, [field]: input }));
+                                }}
+                                required
+                                error={!formValues[field] || formValues[field].length !== 10}
+                                helperText={!formValues[field] ? "Phone Number is required" : formValues[field].length !== 10 ? "Mobile number must be 10 digits" : ""}
                             />
                         )}
                         {/* Email Field */}
@@ -180,58 +201,66 @@ const ViewForm = () => {
                                 fullWidth
                                 type="email"
                                 label={field}
-                                name="email"
-                                value={formValues["email"] || ""}
+                                name={field}
+                                value={formValues[field] || ""}
                                 onChange={handleInputChange}
+                                required
+                                error={!formValues[field]}
+                                helperText={!formValues[field] ? "Email is required" : ""}
                             />
                         )}
-
-                        {/* Select Fields */}
+                        {/* Country Dropdown */}
                         {field === "Country" && (
-                            <FormControl fullWidth>
+                            <FormControl fullWidth required error={!formValues[field]}>
                                 <InputLabel>Country</InputLabel>
-                                <Select name="Country" value={formValues["Country"] || ""} onChange={handleInputChange}>
+                                <Select name={field} value={formValues[field] || ""} onChange={handleInputChange}>
                                     <MenuItem value="India">India</MenuItem>
                                     <MenuItem value="USA">USA</MenuItem>
                                     <MenuItem value="UK">UK</MenuItem>
                                 </Select>
+                                {!formValues[field] && <FormHelperText>Country is required</FormHelperText>}
                             </FormControl>
                         )}
                         {/* State Dropdown */}
                         {field === "State" && (
-                            <FormControl fullWidth>
+                            <FormControl fullWidth required error={!formValues[field]}>
                                 <InputLabel>State</InputLabel>
-                                <Select name="State" value={formValues["State"] || ""} onChange={handleInputChange}>
+                                <Select name={field} value={formValues[field] || ""} onChange={handleInputChange}>
                                     {indianStates.map((state, i) => (
                                         <MenuItem key={i} value={state}>{state}</MenuItem>
                                     ))}
                                 </Select>
+                                {!formValues[field] && <FormHelperText>State is required</FormHelperText>}
                             </FormControl>
                         )}
-
+                        {/* Gender Dropdown */}
                         {field === "Gender" && (
-                            <FormControl fullWidth>
+                            <FormControl fullWidth required error={!formValues[field]}>
                                 <InputLabel>Gender</InputLabel>
-                                <Select name="Gender" value={formValues["Gender"] || ""} onChange={handleInputChange}>
+                                <Select name={field} value={formValues[field] || ""} onChange={handleInputChange}>
                                     <MenuItem value="Male">Male</MenuItem>
                                     <MenuItem value="Female">Female</MenuItem>
                                     <MenuItem value="Other">Other</MenuItem>
                                 </Select>
+                                {!formValues[field] && <FormHelperText>Gender is required</FormHelperText>}
                             </FormControl>
                         )}
-
                         {/* Date Field */}
                         {field === "Date of Birth" && (
                             <TextField
                                 fullWidth
                                 type="date"
-                                name="Date of Birth"
-                                value={formValues["Date of Birth"] || ""}
+                                name={field}
+                                value={formValues[field] || ""}
                                 onChange={handleInputChange}
+                                required
+                                error={!formValues[field]}
+                                helperText={!formValues[field] ? "Date of Birth is required" : ""}
                             />
                         )}
                     </div>
                 ))}
+
 
                 {/* Submit Button */}
                 <Button variant="contained" color="primary" onClick={handleSubmit}>
