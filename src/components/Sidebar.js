@@ -18,6 +18,9 @@ const Sidebar = () => {
                 <ListItemButton component={Link} to="/create-new-form">
                     <ListItemText primary="Your Form" />
                 </ListItemButton>
+                <ListItemButton component={Link} to="/volunteer">
+                    <ListItemText primary="Volunteer" />
+                </ListItemButton>
             </List>
         </Drawer>
     );

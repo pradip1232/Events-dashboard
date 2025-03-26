@@ -28,11 +28,20 @@ const indianStates = [
 
 const genderOptions = ["Male", "Female", "Other"];
 
+
+const fieldTypes = [
+    { label: "Text", value: "text" },
+    { label: "Date", value: "date" },
+    { label: "Checkbox", value: "checkbox" },
+    { label: "Paragraph", value: "paragraph" },
+];
 const DynamicForm = () => {
     const [selectedFields, setSelectedFields] = useState([]);
     const [formFields, setFormFields] = useState([]);
     const [submitted, setSubmitted] = useState(false);
     const [savedForms, setSavedForms] = useState([]);
+    const [fields, setFields] = useState([]);
+
     const [events, setEvents] = useState([]);
 
     useEffect(() => {
@@ -49,6 +58,9 @@ const DynamicForm = () => {
     const handleSubmitSelection = () => {
         setFormFields(selectedFields);
         setSubmitted(true);
+
+        console.log("Selected Fields:", selectedFields);
+        console.log("Custom Fields:", fields);
     };
 
     const handleSaveForm = async (eventId) => {
@@ -99,8 +111,10 @@ const DynamicForm = () => {
             const result = await response.json();
             if (result.success) {
                 console.log("Form status updated successfully!");
+                const newUrl = `${window.location.origin}/events-form?e-name=${encodeURIComponent(eventName)}&ed=${eventId}&fid=${formId}`;
+                setUrl(newUrl);
+                console.log("URL ", newUrl);
 
-               
             } else {
                 console.error("Failed to update form status:", result.message);
             }
@@ -177,6 +191,25 @@ const DynamicForm = () => {
         // alert(generatedUrl," URL copied!");
     };
 
+
+
+
+
+
+    const addField = () => {
+        setFields([...fields, { name: "", type: "text" }]);
+    };
+
+    const handleFieldChange = (index, key, value) => {
+        const newFields = [...fields];
+        newFields[index][key] = value;
+        setFields(newFields);
+        // Automatically add custom fields to selected fields
+        if (key === "name" && value.trim() !== "" && !selectedFields.includes(value)) {
+            setSelectedFields([...selectedFields, value]);
+        }
+    };
+
     return (
 
         <>
@@ -222,6 +255,7 @@ const DynamicForm = () => {
                                                     <>
                                                         <Typography variant="h5" gutterBottom>Select Fields for the Form</Typography>
                                                         <Grid container spacing={1}>
+
                                                             {customFields.map((field, index) => (
                                                                 <Grid item xs={6} key={index}>
                                                                     <FormControlLabel
@@ -235,6 +269,43 @@ const DynamicForm = () => {
                                                                     />
                                                                 </Grid>
                                                             ))}
+
+                                                            {/* slect the custom fields give the fileds name and slecetd thats type text filed , date, check box or paragraph text  */}
+                                                            {/* <TextField /> */}
+                                                            {/* now give the dropdown for type of field that txt  */}
+                                                            {/* date , text , date etc  */}
+
+                                                            <Typography variant="h8" gutterBottom>Custom Fields</Typography>
+                                                            {fields.map((field, index) => (
+                                                                <div key={index} style={{ marginBottom: "8px", display: "flex", gap: "8px" }}>
+                                                                    <TextField
+                                                                        label="Field Name"
+                                                                        variant="outlined"
+                                                                        fullWidth
+                                                                        value={field.name}
+                                                                        onChange={(e) => handleFieldChange(index, "name", e.target.value)}
+                                                                        required
+                                                                    />
+                                                                    <TextField
+                                                                        select
+                                                                        label="Field Type"
+                                                                        variant="outlined"
+                                                                        fullWidth
+                                                                        value={field.type}
+                                                                        onChange={(e) => handleFieldChange(index, "type", e.target.value)}
+                                                                    >
+                                                                        {fieldTypes.map((option) => (
+                                                                            <MenuItem key={option.value} value={option.value}>
+                                                                                {option.label}
+                                                                            </MenuItem>
+                                                                        ))}
+                                                                    </TextField>
+                                                                </div>
+                                                            ))}
+                                                            <IconButton color="primary" onClick={addField} disabled={fields.length > 0 && fields[fields.length - 1].name.trim() === ""}>
+                                                                <AddIcon />
+                                                            </IconButton>
+
                                                         </Grid>
                                                         <Button
                                                             variant="contained"
@@ -386,6 +457,7 @@ const DynamicForm = () => {
                                                                         color="primary"
                                                                     >
                                                                         <ContentCopyIcon />
+
                                                                     </IconButton>
                                                                 )}
 

@@ -26,7 +26,7 @@ const Login = () => {
                 localStorage.setItem("user_logged_in", "true"); // ✅ Fixed key name
                 localStorage.setItem("user_email", result.email);
 
-                console.log("Login Successful: user_logged_in set to true");
+                // console.log("Login Successful: user_logged_in set to true");
 
                 alert("Login successful");
 
