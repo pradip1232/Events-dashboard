@@ -10,6 +10,7 @@ import SignUp from "./pages/SignUp";
 import Login from "./pages/Login";
 import Volunteer from "./pages/Volunteer";
 import VolunteerLogin from "./pages/VolunteerLogin";
+import Events from "./pages/Events";
 
 function App() {
   return (
@@ -24,6 +25,8 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="users" element={<Users />} />
             <Route path="create-new-events" element={<AddNewEvents />} />
+            <Route path="events" element={<Events />} />
+            <Route path="create-new-form" element={<DynamicForm />} />
             <Route path="create-new-form" element={<DynamicForm />} />
             <Route path="volunteer" element={<Volunteer />} />
             <Route path="/volunteer/login" element={<VolunteerLogin />} />

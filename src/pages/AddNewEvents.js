@@ -268,7 +268,7 @@ const AddNewEvents = () => {
                             }}
                         />
                         <TextField
-                            label="Number of Volunteers Required"
+                            label="Number of checkpoints "
                             type="number"
                             variant="outlined"
                             fullWidth
@@ -296,7 +296,7 @@ const AddNewEvents = () => {
                             }}
                         />
                         <TextField
-                            label="Number of Steps"
+                            label="Type Of Guest Registrations"
                             type="number"
                             variant="outlined"
                             fullWidth
